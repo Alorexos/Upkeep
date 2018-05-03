@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Engine/StaticMesh.h"
+#include "Runtime/Engine/Classes/Engine/SkeletalMesh.h"
 #include "Card.generated.h"
 
 UCLASS()
@@ -20,9 +20,8 @@ class UPKEEP_API ACard : public APawn
 
 	private:
 		UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* smCardMesh;
-
-		UStaticMesh* MeshRef;
+		USkeletalMeshComponent* smCardMesh;
+		USkeletalMesh* MeshRef;
 
 	protected:
 		// Called when the game starts or when spawned

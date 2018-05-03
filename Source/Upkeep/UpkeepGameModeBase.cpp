@@ -2,6 +2,10 @@
 
 #include "UpkeepGameModeBase.h"
 
-
+AUpkeepGameModeBase::AUpkeepGameModeBase()
+{
+	DefaultPawnClass = AUpkeepPlayer::StaticClass();
+	PlayerControllerClass = APlayerController::StaticClass();
+}
 
 

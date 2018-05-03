@@ -8,11 +8,11 @@ ACard::ACard()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Meshes/bb8_Object004'"));
-	smCardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CardMeshComponent"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>MeshRef(TEXT("SkeletalMesh'/Game/Upkeep/Meshes/Cards/SM_CardTest.SM_CardTest'"));
+	smCardMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CardMeshComponent"));
 	smCardMesh->SetupAttachment(RootComponent);
 	smCardMesh->SetCollisionProfileName(TEXT("OverlapAll"));
-	smCardMesh->SetStaticMesh(MeshRef.Object);
+	smCardMesh->SetSkeletalMesh(MeshRef.Object);
 }
 // Called when the game starts or when spawned
 void ACard::BeginPlay()

@@ -22,6 +22,7 @@ class UPKEEP_API AChoiceManager : public AActor
 	private:
 		int iFactionNo = 3;
 		TArray<AChoice*> arFactChoice;
+		APlayerController* pPlayer;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;

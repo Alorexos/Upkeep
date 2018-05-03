@@ -3,18 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UpkeepPlayer.h"
 #include "GameFramework/GameModeBase.h"
 #include "UpkeepGameModeBase.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UPKEEP_API AUpkeepGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
+	public:
+		AUpkeepGameModeBase();
 	
 	
 };

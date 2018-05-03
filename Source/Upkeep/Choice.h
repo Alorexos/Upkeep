@@ -6,6 +6,8 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Controller.h"
+#include "GameFramework/PlayerController.h"
 #include "Choice.generated.h"
 
 UCLASS()
@@ -13,13 +15,15 @@ class UPKEEP_API AChoice : public AActor
 {
 	GENERATED_BODY()
 	
-	public:	
+	public:
 		// Sets default values for this actor's properties
 		AChoice();
-
+		void Initialize(APlayerController* pPlayerRef);
 	private:
 		ACard* pCard;
-
+		APawn* pPlayer;
+		FVector PlayerLoc;
+		FString ChoiceLabel;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
