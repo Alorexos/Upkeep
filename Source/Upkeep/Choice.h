@@ -21,7 +21,7 @@ class UPKEEP_API AChoice : public AActor
 		void Initialize(APlayerController* pPlayerRef);
 	private:
 		ACard* pCard;
-		APawn* pPlayer;
+		UActorComponent* pPlayer;
 		FVector PlayerLoc;
 		FString ChoiceLabel;
 	protected:

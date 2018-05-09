@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Actor.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Engine/SkeletalMesh.h"
 #include "Card.generated.h"
 
 UCLASS()
-class UPKEEP_API ACard : public APawn
+class UPKEEP_API ACard : public AActor
 {
 	GENERATED_BODY()
 
@@ -30,8 +30,5 @@ class UPKEEP_API ACard : public APawn
 	public:	
 		// Called every frame
 		virtual void Tick(float DeltaTime) override;
-
-		// Called to bind functionality to input
-		virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UpkeepPlayer.h"
+#include "UpkeepPlayerController.h"
 #include "GameFramework/GameModeBase.h"
 #include "UpkeepGameModeBase.generated.h"
 

@@ -8,12 +8,30 @@ AUpkeepPlayer::AUpkeepPlayer()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Upkeep/Meshes/bb8_Box001.bb8_Box001'"));
-	smCardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMeshComponent"));
-	smCardMesh->SetupAttachment(RootComponent);
-	smCardMesh->SetCollisionProfileName(TEXT("OverlapAll"));
-	smCardMesh->SetStaticMesh(MeshRef.Object);
+	
+	//Root Component
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	
+	//Static Mesh
+	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Upkeep/Meshes/Player.Player'"));
+	smPlayerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMeshComponent"));
+	smPlayerMesh->SetupAttachment(RootComponent);
+	smPlayerMesh->SetCollisionProfileName(TEXT("OverlapAll"));
+	smPlayerMesh->SetStaticMesh(MeshRef.Object);
+
+	//Spring Arm
+	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	OurCameraSpringArm->SetupAttachment(RootComponent);
+	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(-60.0f, 0.0f, 0.0f));
+	OurCameraSpringArm->TargetArmLength = 0.f;
+	OurCameraSpringArm->bEnableCameraLag = true;
+	OurCameraSpringArm->CameraLagSpeed = 3.0f;
+	
+	//Camera
+	OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
+	OurCamera->SetupAttachment(OurCameraSpringArm, USpringArmComponent::SocketName);
 }
+
 
 // Called when the game starts or when spawned
 void AUpkeepPlayer::BeginPlay()
@@ -36,3 +54,7 @@ void AUpkeepPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
+UStaticMeshComponent* AUpkeepPlayer::GetMeshComponent()
+{
+	return smPlayerMesh;
+}

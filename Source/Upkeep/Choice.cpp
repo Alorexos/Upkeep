@@ -20,28 +20,27 @@ void AChoice::BeginPlay()
 {
 	Super::BeginPlay();
 	pCard = GetWorld()->SpawnActor<ACard>(ACard::StaticClass());
-	pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
+	pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn()->FindComponentByClass(UStaticMeshComponent::StaticClass());
 	ChoiceLabel = *this->GetActorLabel();
 	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLabel);
 	if (ChoiceLabel == FString("Choice"))
 	{
-		pCard->AttachToActor(pPlayer, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("Right Card"));
+		pCard->AttachToComponent((USceneComponent*)pPlayer,FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),FName("Right Card"));
 	}
 	else if (ChoiceLabel == FString("Choice1"))
 	{
-		pCard->AttachToActor(pPlayer, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("Middle Card"));
+		pCard->AttachToComponent((USceneComponent*)pPlayer,FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),FName("Middle Card"));
 	}
 	else if (ChoiceLabel == FString("Choice2"))
 	{
-		pCard->AttachToActor(pPlayer, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("Left Card"));
+		pCard->AttachToComponent((USceneComponent*)pPlayer,FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),FName("Left Card"));
 	}
-	
 }
 
 // Called every frame
 void AChoice::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
-	PlayerLoc = pPlayer->GetActorLocation();
+	//pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn();
+	//PlayerLoc = pPlayer->GetActorLocation();
 }

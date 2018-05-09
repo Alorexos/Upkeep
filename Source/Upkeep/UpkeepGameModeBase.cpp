@@ -5,7 +5,7 @@
 AUpkeepGameModeBase::AUpkeepGameModeBase()
 {
 	DefaultPawnClass = AUpkeepPlayer::StaticClass();
-	PlayerControllerClass = APlayerController::StaticClass();
+	PlayerControllerClass = AUpkeepPlayerController::StaticClass();
 }
 
 
