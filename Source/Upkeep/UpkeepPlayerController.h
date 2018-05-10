@@ -3,19 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
 #include "UpkeepPlayerController.generated.h"
-
-class ACameraActor;
-class APawn;
-class APlayerCameraManager;
 
 UCLASS()
 class UPKEEP_API AUpkeepPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+	public:
+		UFUNCTION()
+		void SetupPlayerInputComponent();
+		void Rotate(float Val);
+
+	private:
+		APawn* pPlayerPawn;
+
+	protected:
+		// Called when the game starts or when spawned
+		virtual void BeginPlay() override;
+
 };
