@@ -8,10 +8,10 @@ void AUpkeepPlayerController::BeginPlay()
 	Super::BeginPlay();
 	pPlayerPawn = GetPawn();
 	this->Possess(pPlayerPawn);
-
-	pPlayerPawn->bUseControllerRotationPitch = true;
-	pPlayerPawn->bUseControllerRotationRoll = true;
-	pPlayerPawn->bUseControllerRotationYaw = true;
+	pUpkeepPlayer = (AUpkeepPlayer*) GetPawn();
+	pPlayerPawn->bUseControllerRotationPitch = false;
+	pPlayerPawn->bUseControllerRotationRoll = false;
+	pPlayerPawn->bUseControllerRotationYaw = false;
 	SetupPlayerInputComponent();
 }
 
@@ -22,10 +22,10 @@ void AUpkeepPlayerController::SetupPlayerInputComponent()
 	check(InputComponent);
 	InputComponent->BindAxis("Rotate_Left", this, &AUpkeepPlayerController::Rotate);
 	InputComponent->BindAxis("Rotate_Right", this, &AUpkeepPlayerController::Rotate);
-	InputComponent->BindAxis("Move_Forward", this, &AUpkeepPlayerController::Rotate);
-	InputComponent->BindAxis("Move_Backward", this, &AUpkeepPlayerController::Rotate);
-	InputComponent->BindAxis("Move_Left", this, &AUpkeepPlayerController::Rotate);
-	InputComponent->BindAxis("Move_Right", this, &AUpkeepPlayerController::Rotate);
+	InputComponent->BindAxis("Move_Forward", this, &AUpkeepPlayerController::MoveForward);
+	InputComponent->BindAxis("Move_Backward", this, &AUpkeepPlayerController::MoveForward);
+	InputComponent->BindAxis("Move_Left", this, &AUpkeepPlayerController::MoveSideways);
+	InputComponent->BindAxis("Move_Right", this, &AUpkeepPlayerController::MoveSideways);
 
 }
 
@@ -34,9 +34,38 @@ void AUpkeepPlayerController::Rotate(float Val)
 {
 	if (Val != 0.0f)
 	{
-		if (pPlayerPawn) 
+		if (pUpkeepPlayer)
 		{
-			pPlayerPawn->AddControllerYawInput(Val);
+			rotMover = FRotator(0.0, Val, 0.0);
+			FQuat QuatRotation = FQuat(rotMover);
+			pUpkeepPlayer->GetPlayerMover()->AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
+
+		}
+	}
+}
+
+void AUpkeepPlayerController::MoveForward(float Val)
+{
+	if (Val != 0.0f)
+	{
+		if (pUpkeepPlayer)
+		{
+			FVector NewLocation = pUpkeepPlayer->GetPlayerMover()->GetActorLocation();
+			NewLocation += pUpkeepPlayer->GetPlayerMover()->GetActorForwardVector() * Val;
+			pUpkeepPlayer->GetPlayerMover()->SetActorLocation(NewLocation);
+		}
+	}
+}
+
+void AUpkeepPlayerController::MoveSideways(float Val)
+{
+	if (Val != 0.0f)
+	{
+		if (pUpkeepPlayer)
+		{
+			FVector NewLocation = pUpkeepPlayer->GetPlayerMover()->GetActorLocation();
+			NewLocation += pUpkeepPlayer->GetPlayerMover()->GetActorRightVector() * Val;
+			pUpkeepPlayer->GetPlayerMover()->SetActorLocation(NewLocation);
 		}
 	}
 }

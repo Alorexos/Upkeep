@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "PlayerMover.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
@@ -20,6 +21,7 @@ class UPKEEP_API AUpkeepPlayer : public APawn
 		// Sets default values for this pawn's properties
 		AUpkeepPlayer();
 		UStaticMeshComponent* GetMeshComponent();
+		APlayerMover* GetPlayerMover();
 
 	protected:
 		// Called when the game starts or when spawned
@@ -30,7 +32,7 @@ class UPKEEP_API AUpkeepPlayer : public APawn
 		UStaticMeshComponent* smPlayerMesh;
 		UStaticMesh* MeshRef;
 	private:
-
+		APlayerMover* pPlayerMover;
 
 
 	public:	

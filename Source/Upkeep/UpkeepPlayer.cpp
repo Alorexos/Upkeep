@@ -9,9 +9,12 @@ AUpkeepPlayer::AUpkeepPlayer()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	FRotator StartRotation = FRotator(-30.0, 0.0, 0.0);
+	FQuat QuatRotation = FQuat(StartRotation);
+
 	//Root Component
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	
+	RootComponent->SetRelativeRotation(QuatRotation, false, 0, ETeleportType::None);
 	//Static Mesh
 	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Upkeep/Meshes/Player.Player'"));
 	smPlayerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMeshComponent"));
@@ -20,16 +23,16 @@ AUpkeepPlayer::AUpkeepPlayer()
 	smPlayerMesh->SetStaticMesh(MeshRef.Object);
 
 	//Spring Arm
-	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
-	OurCameraSpringArm->SetupAttachment(RootComponent);
-	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-	OurCameraSpringArm->TargetArmLength = 0.f;
-	OurCameraSpringArm->bEnableCameraLag = true;
-	OurCameraSpringArm->CameraLagSpeed = 3.0f;
+	//OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	//OurCameraSpringArm->SetupAttachment(RootComponent);
+	//OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
+	//OurCameraSpringArm->TargetArmLength = 0.f;
+	//OurCameraSpringArm->bEnableCameraLag = true;
+	//OurCameraSpringArm->CameraLagSpeed = 3.0f;
 	
 	//Camera
 	OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
-	OurCamera->SetupAttachment(OurCameraSpringArm, USpringArmComponent::SocketName);
+	OurCamera->SetupAttachment(RootComponent);
 }
 
 
@@ -37,7 +40,8 @@ AUpkeepPlayer::AUpkeepPlayer()
 void AUpkeepPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	pPlayerMover = GetWorld()->SpawnActor<APlayerMover>(APlayerMover::StaticClass(),FVector(0.0, 0.0, 0.0), FRotator(0.0, 0.0, 0.0));
+	this->AttachToActor(pPlayerMover, FAttachmentTransformRules(EAttachmentRule::KeepWorld,false));
 }
 
 // Called every frame
@@ -57,4 +61,9 @@ void AUpkeepPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 UStaticMeshComponent* AUpkeepPlayer::GetMeshComponent()
 {
 	return smPlayerMesh;
+}
+
+APlayerMover* AUpkeepPlayer::GetPlayerMover()
+{
+	return pPlayerMover;
 }

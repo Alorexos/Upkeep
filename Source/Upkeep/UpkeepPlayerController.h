@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "UpkeepPlayer.h"
+#include "PlayerMover.h"
 #include "GameFramework/PlayerController.h"
 #include "UpkeepPlayerController.generated.h"
 
@@ -16,10 +18,12 @@ class UPKEEP_API AUpkeepPlayerController : public APlayerController
 		UFUNCTION()
 		void SetupPlayerInputComponent();
 		void Rotate(float Val);
-
+		void MoveForward(float Val);
+		void MoveSideways(float Val);
 	private:
 		APawn* pPlayerPawn;
-
+		AUpkeepPlayer* pUpkeepPlayer;
+		FRotator rotMover;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
