@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerMover.h"
-
+#include "Engine.h"
 
 // Sets default values
 APlayerMover::APlayerMover()
@@ -18,6 +18,7 @@ APlayerMover::APlayerMover()
 	smPlayerMesh->SetupAttachment(RootComponent);
 	smPlayerMesh->SetCollisionProfileName(TEXT("OverlapAll"));
 	smPlayerMesh->SetStaticMesh(MeshRef.Object);
+
 }
 
 // Called when the game starts or when spawned

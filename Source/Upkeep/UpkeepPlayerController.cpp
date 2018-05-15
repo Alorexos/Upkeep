@@ -9,9 +9,10 @@ void AUpkeepPlayerController::BeginPlay()
 	pPlayerPawn = GetPawn();
 	this->Possess(pPlayerPawn);
 	pUpkeepPlayer = (AUpkeepPlayer*) GetPawn();
-	pPlayerPawn->bUseControllerRotationPitch = false;
-	pPlayerPawn->bUseControllerRotationRoll = false;
-	pPlayerPawn->bUseControllerRotationYaw = false;
+	bShowMouseCursor = true;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+	bEnableTouchOverEvents = true;
 	SetupPlayerInputComponent();
 }
 

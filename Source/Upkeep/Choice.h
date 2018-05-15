@@ -2,12 +2,14 @@
 
 #pragma once
 
-#include "Card.h"
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
+#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Engine/SkeletalMesh.h"
 #include "Choice.generated.h"
 
 UCLASS()
@@ -18,19 +20,30 @@ class UPKEEP_API AChoice : public AActor
 	public:
 		// Sets default values for this actor's properties
 		AChoice();
-		void Initialize(APlayerController* pPlayerRef);
+
+		// Called every frame
+		virtual void Tick(float DeltaTime) override;
+
+		// Initial setup of the class outside of constructor
+		void Initialize();
+
+		//Function to handle the interaction
+		UFUNCTION()
+		void CustomOnBeginMouseOver(UPrimitiveComponent* TouchedComponent);
+
 	private:
-		ACard* pCard;
+	    USkeletalMeshComponent* smCardMesh;
+		USkeletalMesh* MeshRef;
 		UActorComponent* pPlayer;
 		FVector PlayerLoc;
 		FString ChoiceLabel;
+		
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
 
 	public:	
-		// Called every frame
-		virtual void Tick(float DeltaTime) override;
+
 
 	
 	

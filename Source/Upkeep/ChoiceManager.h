@@ -20,9 +20,12 @@ class UPKEEP_API AChoiceManager : public AActor
 		void GenerateChoices();
 
 	private:
-		int iFactionNo = 3;
-		TArray<AChoice*> arFactChoice;
+		int iFactionNo;
+		TArray<AChoice*> FactChoice;
 		APlayerController* pPlayer;
+		FActorSpawnParameters ChoiceParameters;
+		FString GetCardName(int CardNum);
+
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
