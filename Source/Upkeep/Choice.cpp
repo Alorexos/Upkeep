@@ -6,7 +6,7 @@
 // Sets default values
 AChoice::AChoice()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	//RootComponent
@@ -20,9 +20,10 @@ AChoice::AChoice()
 
 	//Setup Mouseover
 	smCardMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-	smCardMesh->OnBeginCursorOver.AddDynamic(this, &AChoice::CustomOnBeginMouseOver);
+	smCardMesh->OnBeginCursorOver.AddDynamic(this, &AChoice::OnBeginMouseOver);
+	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
+	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
 }
-
 void AChoice::Initialize()
 {
 	pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn()->FindComponentByClass(UStaticMeshComponent::StaticClass());
@@ -35,7 +36,6 @@ void AChoice::Initialize()
 void AChoice::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -44,7 +44,41 @@ void AChoice::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AChoice::CustomOnBeginMouseOver(UPrimitiveComponent* TouchedComponent)
+void AChoice::OnBeginMouseOver(UPrimitiveComponent* TouchedComponent)
 {
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("Mouse Over"));
+	if (!MouseOverSet && !Focused)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("MouseOver = " + ChoiceLabel));
+		FVector NewLocation = this->GetActorLocation();
+		NewLocation += this->GetActorForwardVector() * 1.f;
+		this->SetActorLocation(NewLocation);
+		MouseOverSet = true;
+	}
+	
+}
+
+void AChoice::OnEndMouseOver(UPrimitiveComponent* TouchedComponent)
+{
+	if (MouseOverSet && !Focused)
+	{
+		FVector NewLocation = this->GetActorLocation();
+		NewLocation += this->GetActorForwardVector() * -1.f;
+		this->SetActorLocation(NewLocation);
+		MouseOverSet = false;
+	}
+}
+void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
+{
+	if (!Focused && MouseOverSet)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("Mouse Click = " + ChoiceLabel));
+		FVector NewLocation = this->GetActorLocation();
+		NewLocation += this->GetActorForwardVector() * 15.f;
+		NewLocation += this->GetActorUpVector() * 19.f;
+		if (ChoiceLabel == FString("Left Card")){ NewLocation += this->GetActorRightVector() * 5.f; }
+		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
+		this->SetActorLocation(NewLocation);
+		Focused = true;
+	}
+	return UFUNCTION() void();
 }

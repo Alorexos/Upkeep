@@ -29,15 +29,29 @@ class UPKEEP_API AChoice : public AActor
 
 		//Function to handle the interaction
 		UFUNCTION()
-		void CustomOnBeginMouseOver(UPrimitiveComponent* TouchedComponent);
-
-	private:
-	    USkeletalMeshComponent* smCardMesh;
-		USkeletalMesh* MeshRef;
-		UActorComponent* pPlayer;
-		FVector PlayerLoc;
-		FString ChoiceLabel;
+		void OnBeginMouseOver(UPrimitiveComponent* TouchedComponent);
+		UFUNCTION()
+		void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
+		UFUNCTION()
+		void OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
 		
+	private:
+		UPROPERTY(EditAnywhere)
+	    USkeletalMeshComponent* smCardMesh;
+		UPROPERTY(EditAnywhere)
+		USkeletalMesh* MeshRef;
+		UPROPERTY(EditAnywhere)
+		UActorComponent* pPlayer;
+		UPROPERTY(EditAnywhere)
+		APlayerController* pPlayerController;
+		UPROPERTY(EditAnywhere)
+		FVector PlayerLoc;
+		UPROPERTY(EditAnywhere)
+		FString ChoiceLabel;
+		UPROPERTY(EditAnywhere)
+		bool MouseOverSet;
+		UPROPERTY(EditAnywhere)
+		bool Focused;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
