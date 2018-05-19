@@ -43,8 +43,6 @@ class UPKEEP_API AChoice : public AActor
 		UPROPERTY(EditAnywhere)
 		UActorComponent* pPlayer;
 		UPROPERTY(EditAnywhere)
-		APlayerController* pPlayerController;
-		UPROPERTY(EditAnywhere)
 		FVector PlayerLoc;
 		UPROPERTY(EditAnywhere)
 		FString ChoiceLabel;

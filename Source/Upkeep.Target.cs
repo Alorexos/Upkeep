@@ -9,6 +9,6 @@ public class UpkeepTarget : TargetRules
 	{
 		Type = TargetType.Game;
 
-		ExtraModuleNames.AddRange( new string[] { "Upkeep" } );
+		ExtraModuleNames.AddRange( new string[] { "Upkeep", "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Slate", "SlateCore" } );
 	}
 }

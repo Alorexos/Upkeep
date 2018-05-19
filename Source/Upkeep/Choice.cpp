@@ -22,7 +22,8 @@ AChoice::AChoice()
 	smCardMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	smCardMesh->OnBeginCursorOver.AddDynamic(this, &AChoice::OnBeginMouseOver);
 	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
-	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
+
+	
 }
 void AChoice::Initialize()
 {
@@ -30,6 +31,16 @@ void AChoice::Initialize()
 	ChoiceLabel = *this->GetActorLabel();
 	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLabel);
 	this->AttachToComponent((USceneComponent*)pPlayer, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName(*ChoiceLabel));
+
+	//Setup Card Rotation
+	float Pitch = 0.f;
+	float Roll = 5.f;
+	float Yaw = 0.f;
+	if (ChoiceLabel == FString("Left Card")) { Yaw = -10.f; }
+	if (ChoiceLabel == FString("Right Card")) { Yaw = 10.f; }
+	FRotator rotMover = FRotator(Pitch, Yaw, Roll);
+	FQuat QuatRotation = FQuat(rotMover);
+	this->AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 }
 
 // Called when the game starts or when spawned
@@ -69,12 +80,15 @@ void AChoice::OnEndMouseOver(UPrimitiveComponent* TouchedComponent)
 }
 void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("Mouse Click = " + ButtonPressed.ToString()));
 	if (!Focused && MouseOverSet)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("Mouse Click = " + ChoiceLabel));
+		FRotator rotMover = FRotator(0.0, 0.0, 0.0);
+		FQuat QuatRotation = FQuat(rotMover);
+		this->SetActorRelativeRotation(QuatRotation,false,0, ETeleportType::None);
 		FVector NewLocation = this->GetActorLocation();
-		NewLocation += this->GetActorForwardVector() * 15.f;
-		NewLocation += this->GetActorUpVector() * 19.f;
+		NewLocation += this->GetActorForwardVector() * 13.f;
+		NewLocation += this->GetActorUpVector() * 15.f;
 		if (ChoiceLabel == FString("Left Card")){ NewLocation += this->GetActorRightVector() * 5.f; }
 		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
 		this->SetActorLocation(NewLocation);
@@ -82,3 +96,4 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 	}
 	return UFUNCTION() void();
 }
+

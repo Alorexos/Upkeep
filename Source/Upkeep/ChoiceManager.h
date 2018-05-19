@@ -25,7 +25,6 @@ class UPKEEP_API AChoiceManager : public AActor
 		APlayerController* pPlayer;
 		FActorSpawnParameters ChoiceParameters;
 		FString GetCardName(int CardNum);
-
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
