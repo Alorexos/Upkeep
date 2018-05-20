@@ -21,18 +21,12 @@ AUpkeepPlayer::AUpkeepPlayer()
 	smPlayerMesh->SetupAttachment(RootComponent);
 	smPlayerMesh->SetCollisionProfileName(TEXT("OverlapAll"));
 	smPlayerMesh->SetStaticMesh(MeshRef.Object);
-
-	//Spring Arm
-	//OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
-	//OurCameraSpringArm->SetupAttachment(RootComponent);
-	//OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-	//OurCameraSpringArm->TargetArmLength = 0.f;
-	//OurCameraSpringArm->bEnableCameraLag = true;
-	//OurCameraSpringArm->CameraLagSpeed = 3.0f;
 	
 	//Camera
 	OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
 	OurCamera->SetupAttachment(RootComponent);
+
+
 }
 
 

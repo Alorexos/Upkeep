@@ -9,7 +9,7 @@
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
-#include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
+
 #include "UpkeepPlayer.generated.h"
 
 UCLASS()
@@ -22,6 +22,8 @@ class UPKEEP_API AUpkeepPlayer : public APawn
 		AUpkeepPlayer();
 		UStaticMeshComponent* GetMeshComponent();
 		APlayerMover* GetPlayerMover();
+
+
 
 	protected:
 		// Called when the game starts or when spawned
