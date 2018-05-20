@@ -22,7 +22,7 @@ AChoice::AChoice()
 	smCardMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	smCardMesh->OnBeginCursorOver.AddDynamic(this, &AChoice::OnBeginMouseOver);
 	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
-
+	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
 	
 }
 void AChoice::Initialize()
