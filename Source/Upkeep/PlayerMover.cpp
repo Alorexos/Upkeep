@@ -19,24 +19,7 @@ APlayerMover::APlayerMover()
 	smPlayerMesh->SetCollisionProfileName(TEXT("OverlapAll"));
 	smPlayerMesh->SetStaticMesh(MeshRef.Object);
 
-	//Setup Interface
-	MyWidget = CreateDefaultSubobject<UWidgetComponent>("Widget");
-	static ConstructorHelpers::FClassFinder<UUserWidget> hudWidgetObj(TEXT("'/Game/Upkeep/UI/UI'"));
-	if (hudWidgetObj.Succeeded())
-	{
-		hudWidgetClass = hudWidgetObj.Class;
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "SelectableActorHUD not found !");
-		hudWidgetClass = nullptr;
-	}
 
-	MyWidget->SetWidgetClass(hudWidgetClass);
-	MyWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	MyWidget->SetDrawSize(FVector2D(1.0, 1.0f));
-	MyWidget->SetVisibility(true);
-	MyWidget->SetupAttachment(RootComponent);
 
 }
 

@@ -10,18 +10,20 @@ AUpkeepPlayerController::AUpkeepPlayerController()
 void AUpkeepPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	pPlayerPawn = GetPawn();
-	pUpkeepPlayer = (AUpkeepPlayer*) GetPawn();
+	pUpkeepPlayer = (AUpkeepPlayer*)GetPawn();
+	Possess(GetPawn());
+	bAutoManageActiveCameraTarget = false;
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true;
 	bEnableTouchOverEvents = true;
 	SetupPlayerInputComponent();
+
 }
 
 void AUpkeepPlayerController::SetupPlayerInputComponent()
 {
-	// set up gameplay key bindings
+	// Setup gameplay key bindings
 	EnableInput(this);
 	check(InputComponent);
 	InputComponent->BindAxis("Rotate_Left", this, &AUpkeepPlayerController::Rotate);
@@ -30,7 +32,6 @@ void AUpkeepPlayerController::SetupPlayerInputComponent()
 	InputComponent->BindAxis("Move_Backward", this, &AUpkeepPlayerController::MoveForward);
 	InputComponent->BindAxis("Move_Left", this, &AUpkeepPlayerController::MoveSideways);
 	InputComponent->BindAxis("Move_Right", this, &AUpkeepPlayerController::MoveSideways);
-
 }
 
 
@@ -41,8 +42,7 @@ void AUpkeepPlayerController::Rotate(float Val)
 		if (pUpkeepPlayer)
 		{
 			rotMover = FRotator(0.0, Val, 0.0);
-			FQuat QuatRotation = FQuat(rotMover);
-			pUpkeepPlayer->GetPlayerMover()->AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
+			pUpkeepPlayer->AddActorWorldRotation(rotMover, false, 0, ETeleportType::None);
 
 		}
 	}
@@ -54,9 +54,9 @@ void AUpkeepPlayerController::MoveForward(float Val)
 	{
 		if (pUpkeepPlayer)
 		{
-			FVector NewLocation = pUpkeepPlayer->GetPlayerMover()->GetActorLocation();
-			NewLocation += pUpkeepPlayer->GetPlayerMover()->GetActorForwardVector() * Val;
-			pUpkeepPlayer->GetPlayerMover()->SetActorLocation(NewLocation);
+			FVector NewLocation = pUpkeepPlayer->GetActorLocation();
+			NewLocation += pUpkeepPlayer->GetActorForwardVector() * Val;
+			pUpkeepPlayer->SetActorLocation(NewLocation);
 		}
 	}
 }
@@ -67,9 +67,9 @@ void AUpkeepPlayerController::MoveSideways(float Val)
 	{
 		if (pUpkeepPlayer)
 		{
-			FVector NewLocation = pUpkeepPlayer->GetPlayerMover()->GetActorLocation();
-			NewLocation += pUpkeepPlayer->GetPlayerMover()->GetActorRightVector() * Val;
-			pUpkeepPlayer->GetPlayerMover()->SetActorLocation(NewLocation);
+			FVector NewLocation = pUpkeepPlayer->GetActorLocation();
+			NewLocation += pUpkeepPlayer->GetActorRightVector() * Val;
+			pUpkeepPlayer->SetActorLocation(NewLocation);
 		}
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/World.h"
+#include "UpkeepPlayer.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
@@ -41,7 +42,8 @@ class UPKEEP_API AChoice : public AActor
 		UPROPERTY(EditAnywhere)
 		USkeletalMesh* MeshRef;
 		UPROPERTY(EditAnywhere)
-		UActorComponent* pPlayer;
+		AUpkeepPlayer* pPlayer;
+		UActorComponent* CardHolderComponent;
 		UPROPERTY(EditAnywhere)
 		FVector PlayerLoc;
 		UPROPERTY(EditAnywhere)

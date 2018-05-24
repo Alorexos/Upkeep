@@ -8,6 +8,7 @@
 #include "PlayerMover.h"
 #include "UpkeepUI.h"
 #include "GameFramework/PlayerController.h"
+
 #include "UpkeepPlayerController.generated.h"
 
 UCLASS()
@@ -24,11 +25,11 @@ class UPKEEP_API AUpkeepPlayerController : public APlayerController
 		void MoveSideways(float Val);
 
 
-
 	private:
 		APawn* pPlayerPawn;
 		AUpkeepPlayer* pUpkeepPlayer;
 		FRotator rotMover;
+		APlayerMover* pPlayerMover;
 
 	protected:
 		// Called when the game starts or when spawned

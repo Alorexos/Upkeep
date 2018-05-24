@@ -9,6 +9,6 @@ public class UpkeepEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "Upkeep" } );
+		ExtraModuleNames.AddRange( new string[] { "Upkeep" , "CinematicCamera" } );
 	}
 }

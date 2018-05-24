@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "PlayerMover.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
-
+#include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
+#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Runtime/UMG/Public/Components/WidgetComponent.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "UpkeepPlayer.generated.h"
 
 UCLASS()
@@ -21,20 +25,31 @@ class UPKEEP_API AUpkeepPlayer : public APawn
 		// Sets default values for this pawn's properties
 		AUpkeepPlayer();
 		UStaticMeshComponent* GetMeshComponent();
-		APlayerMover* GetPlayerMover();
+		UStaticMeshComponent* GetCardHolderComponent();
 
-
+		//Interface
+		UPROPERTY(EditAnywhere)
+			TSubclassOf<UUserWidget> hudWidgetClass;
+		UPROPERTY(EditAnywhere)
+			UWidgetComponent* MyWidget;
 
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
 		UPROPERTY(EditAnywhere)
-		USpringArmComponent* OurCameraSpringArm;
 		UCameraComponent* OurCamera;
-		UStaticMeshComponent* smPlayerMesh;
-		UStaticMesh* MeshRef;
+		UPROPERTY(EditAnywhere)
+		USpringArmComponent* OurCameraSpringArm;
+
+		// Mesh variables
+	    UStaticMesh* MeshRef;
+		UStaticMesh* CardHolderMeshRef;
+		UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* PlayerMesh;
+		UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* CardHolder;
 	private:
-		APlayerMover* pPlayerMover;
+		
 
 
 	public:	

@@ -27,10 +27,11 @@ AChoice::AChoice()
 }
 void AChoice::Initialize()
 {
-	pPlayer = GetWorld()->GetFirstPlayerController()->GetPawn()->FindComponentByClass(UStaticMeshComponent::StaticClass());
+	pPlayer = (AUpkeepPlayer*)GetWorld()->GetFirstPlayerController()->GetPawn();
+	CardHolderComponent = pPlayer->GetCardHolderComponent();
 	ChoiceLabel = *this->GetActorLabel();
 	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLabel);
-	this->AttachToComponent((USceneComponent*)pPlayer, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName(*ChoiceLabel));
+	this->AttachToComponent((USceneComponent*)CardHolderComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName(*ChoiceLabel));
 
 	//Setup Card Rotation
 	float Pitch = 0.f;
