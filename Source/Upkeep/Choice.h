@@ -54,6 +54,10 @@ class UPKEEP_API AChoice : public AActor
 		UPROPERTY(EditAnywhere)
 		bool Focused;
 
+		FVector DragStartLoc;
+		bool DragStart;
+		
+
 		//Focused variables
 		float FocPitch;
 		float FocYaw;

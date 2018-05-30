@@ -192,16 +192,24 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 	return UFUNCTION() void();
 }
 void AChoice::OnMouseDrag(float Val)
-{
+{	
 	if (Focused && Val != 0 && MouseOverSet)
 	{
+		if (!DragStart)
+		{
+			DragStartLoc = this->GetActorLocation();
+			DragStart = true;
+		}
 		FVector MouseLoc;
 		FVector MouseDir;
 		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(MouseLoc, MouseDir);
 		MouseLoc += MouseDir * 5.0f;
 		this->SetActorLocation(MouseLoc);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.X));
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.Y));
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.Z));
+		
+	}
+	if (Focused && Val == 0 && DragStart)
+	{
+		this->SetActorLocation(DragStartLoc);
+		DragStart = false;
 	}
 }
