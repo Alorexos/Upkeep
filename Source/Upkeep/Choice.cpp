@@ -12,11 +12,11 @@ AChoice::AChoice()
 	//RootComponent
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>MeshRef(TEXT("SkeletalMesh'/Game/Upkeep/Meshes/Cards/SM_CardTest.SM_CardTest'"));
-	smCardMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CardMeshComponent"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Upkeep/Meshes/Cards/SM_Card.SM_Card'"));
+	smCardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CardMeshComponent"));
 	smCardMesh->SetupAttachment(RootComponent);
 	smCardMesh->SetCollisionProfileName(TEXT("OverlapAll"));
-	smCardMesh->SetSkeletalMesh(MeshRef.Object);
+	smCardMesh->SetStaticMesh(MeshRef.Object);
 
 	//Setup Mouseover
 	smCardMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
@@ -48,22 +48,114 @@ void AChoice::Initialize()
 void AChoice::BeginPlay()
 {
 	Super::BeginPlay();
+	FocTranX = 0.0;
+	FocTranY = 0.0;
+	FocTranZ = 0.0;
+	InputComponent = GetWorld()->GetFirstPlayerController()->InputComponent;
+	InputComponent->BindAxis("Mouse_Left", this, &AChoice::OnMouseDrag);
 }
 
 // Called every frame
 void AChoice::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AnimateFocused();
+}
+
+void AChoice::AnimateFocused()
+{
+	if (Focused) 
+	{
+		FVector Location = this->GetActorLocation();
+		
+		//Take card out of hand
+		//if (Stage1Ticks >= 0)
+		//{
+		//	float AnimYaw;
+		//	Location += this->GetActorForwardVector() * 0.5;
+		//	if (ChoiceLabel == FString("Left Card"))
+		//	{
+		//		AnimYaw = 10.0 / Stage1Ticks;
+		//	}
+		//	if (ChoiceLabel == FString("Right Card"))
+		//	{
+		//		AnimYaw = -10.0 / Stage1Ticks;
+		//	}
+		//	
+		//	this->AddActorLocalRotation(FRotator(0.0, AnimYaw, 0.0));
+		//	Stage1Ticks -= 1;
+		//}
+		//else
+		//if (Stage2Ticks >= 0)
+		//{	
+		//	float AnimRoll;
+		//	if (ChoiceLabel == FString("Left Card")) 
+		//	{ 
+		//		AnimRoll = -10.0 / Stage2Ticks;
+		//		Location += this->GetActorRightVector() * 0.5f;
+		//	}
+		//	if (ChoiceLabel == FString("Right Card")) 
+		//	{ 
+		//		AnimRoll = -10.0 / Stage2Ticks;
+		//		Location += this->GetActorRightVector() * -0.5f; 
+		//	}
+		//	
+		//	this->AddActorLocalRotation(FRotator(0.0, 0.0, AnimRoll));
+		//	Stage2Ticks -= 1;
+		//}
+
+
+		//Location += this->GetActorUpVector() * 17.f;
+
+		//this->SetActorLocation(Location);
+
+
+		//if (RelativeRotation.Pitch != 0.0)
+		//{
+		//	if (this->GetActorRotation().Pitch > 0)
+		//	{
+		//		this->AddActorRotation(FRotator(-0.1, 0.0, 0.0));
+		//	}
+		//	if (this->GetActorRotation().Pitch < 0)
+		//	{
+		//		this->AddActorLocalRotation(FRotator(0.1, 0.0, 0.0));
+		//	}
+		//}
+		//if (this->GetActorRotation().Roll != 0.0)
+		//{
+		//	if (this->GetActorRotation().Roll > 0)
+		//	{
+		//		this->AddActorLocalRotation(FRotator(-0.1, 0.0, 0.0));
+		//	}
+		//	if (this->GetActorRotation().Roll < 0)
+		//	{
+		//		this->AddActorLocalRotation(FRotator(0.1, 0.0, 0.0));
+		//	}
+		//}
+		//if (this->GetActorRotation().Yaw != 0.0)
+		//{
+		//	if (this->GetActorRotation().Yaw > 0)
+		//	{
+		//		this->AddActorLocalRotation(FRotator(-0.1, 0.0, 0.0));
+		//	}
+		//	if (this->GetActorRotation().Yaw < 0)
+		//	{
+		//		this->AddActorLocalRotation(FRotator(0.1, 0.0, 0.0));
+		//	}
+		//}
+	}
 }
 
 void AChoice::OnBeginMouseOver(UPrimitiveComponent* TouchedComponent)
 {
-	if (!MouseOverSet && !Focused)
+	if (!MouseOverSet)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("MouseOver = " + ChoiceLabel));
-		FVector NewLocation = this->GetActorLocation();
-		NewLocation += this->GetActorForwardVector() * 1.f;
-		this->SetActorLocation(NewLocation);
+		if (!Focused)
+		{
+			FVector NewLocation = this->GetActorLocation();
+			NewLocation += this->GetActorForwardVector() * 1.f;
+			this->SetActorLocation(NewLocation);
+		}
 		MouseOverSet = true;
 	}
 	
@@ -71,25 +163,27 @@ void AChoice::OnBeginMouseOver(UPrimitiveComponent* TouchedComponent)
 
 void AChoice::OnEndMouseOver(UPrimitiveComponent* TouchedComponent)
 {
-	if (MouseOverSet && !Focused)
+	if (MouseOverSet)
 	{
-		FVector NewLocation = this->GetActorLocation();
-		NewLocation += this->GetActorForwardVector() * -1.f;
-		this->SetActorLocation(NewLocation);
+		if (!Focused)
+		{
+			FVector NewLocation = this->GetActorLocation();
+			NewLocation += this->GetActorForwardVector() * -1.f;
+			this->SetActorLocation(NewLocation);
+		}
 		MouseOverSet = false;
 	}
 }
 void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Cyan, TEXT("Mouse Click = " + ButtonPressed.ToString()));
-	if (!Focused && MouseOverSet)
+	if (!Focused)
 	{
 		FRotator rotMover = FRotator(0.0, 0.0, 0.0);
 		FQuat QuatRotation = FQuat(rotMover);
 		this->SetActorRelativeRotation(QuatRotation,false,0, ETeleportType::None);
 		FVector NewLocation = this->GetActorLocation();
-		NewLocation += this->GetActorForwardVector() * 13.f;
-		NewLocation += this->GetActorUpVector() * 15.f;
+		NewLocation += this->GetActorForwardVector() * 14.f;
+		NewLocation += this->GetActorUpVector() * 17.f;
 		if (ChoiceLabel == FString("Left Card")){ NewLocation += this->GetActorRightVector() * 5.f; }
 		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
 		this->SetActorLocation(NewLocation);
@@ -97,4 +191,17 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 	}
 	return UFUNCTION() void();
 }
-
+void AChoice::OnMouseDrag(float Val)
+{
+	if (Focused && Val != 0 && MouseOverSet)
+	{
+		FVector MouseLoc;
+		FVector MouseDir;
+		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(MouseLoc, MouseDir);
+		MouseLoc += MouseDir * 5.0f;
+		this->SetActorLocation(MouseLoc);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.X));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.Y));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString::SanitizeFloat(MouseLoc.Z));
+	}
+}

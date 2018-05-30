@@ -34,8 +34,8 @@ AUpkeepPlayer::AUpkeepPlayer()
 	ConstructorHelpers::FObjectFinder<UStaticMesh>CardHolderMeshRef(TEXT("StaticMesh'/Game/Upkeep/UI/Meshes/SM_CardBorder.SM_CardBorder'"));
 	CardHolder = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CardHolderMeshComponent"));
 	CardHolder->AttachToComponent(OurCameraSpringArm, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
-	CardHolder->SetRelativeRotation(FRotator(0.f,90.f,70.f));
-	CardHolder->SetRelativeLocation(FVector(70.f, 0.f, -28.f));
+	CardHolder->SetRelativeRotation(FRotator(0.f,90.f,90.f));
+	CardHolder->SetRelativeLocation(FVector(60.f, 0.f, -23.f));
 	CardHolder->SetCollisionProfileName(TEXT("OverlapAll"));
 	CardHolder->SetStaticMesh(CardHolderMeshRef.Object);
 

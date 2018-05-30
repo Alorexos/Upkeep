@@ -8,9 +8,10 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
-#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Engine/SkeletalMesh.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
+#include "Runtime/Engine/Classes/Engine/StaticMesh.h"
 #include "Choice.generated.h"
 
 UCLASS()
@@ -35,10 +36,10 @@ class UPKEEP_API AChoice : public AActor
 		void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
 		UFUNCTION()
 		void OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
-		
+		void OnMouseDrag(float Val);
 	private:
 		UPROPERTY(EditAnywhere)
-	    USkeletalMeshComponent* smCardMesh;
+	    UStaticMeshComponent* smCardMesh;
 		UPROPERTY(EditAnywhere)
 		USkeletalMesh* MeshRef;
 		UPROPERTY(EditAnywhere)
@@ -52,6 +53,19 @@ class UPKEEP_API AChoice : public AActor
 		bool MouseOverSet;
 		UPROPERTY(EditAnywhere)
 		bool Focused;
+
+		//Focused variables
+		float FocPitch;
+		float FocYaw;
+		float FocRoll;
+		float FocTranX;
+		float FocTranY;
+		float FocTranZ;
+		int Stage1Ticks = 25;
+		int Stage2Ticks = 10;
+		//Functions 
+		void AnimateFocused();
+		UInputComponent* InputComponent;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
