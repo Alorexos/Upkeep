@@ -41,7 +41,7 @@ class UPKEEP_API AChoice : public AActor
 		UPROPERTY(EditAnywhere)
 	    UStaticMeshComponent* smCardMesh;
 		UPROPERTY(EditAnywhere)
-		USkeletalMesh* MeshRef;
+		UStaticMesh* MeshRef;
 		UPROPERTY(EditAnywhere)
 		AUpkeepPlayer* pPlayer;
 		UActorComponent* CardHolderComponent;
@@ -56,7 +56,7 @@ class UPKEEP_API AChoice : public AActor
 
 		FVector DragStartLoc;
 		bool DragStart;
-		
+		FVector HolderLocation;
 
 		//Focused variables
 		float FocPitch;

@@ -93,3 +93,7 @@ UStaticMeshComponent * AUpkeepPlayer::GetCardHolderComponent()
 	return CardHolder;
 }
 
+FVector AUpkeepPlayer::GetHolderLocation()
+{
+	return CardHolder->GetComponentLocation();
+}

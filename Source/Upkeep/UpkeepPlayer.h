@@ -26,6 +26,7 @@ class UPKEEP_API AUpkeepPlayer : public APawn
 		AUpkeepPlayer();
 		UStaticMeshComponent* GetMeshComponent();
 		UStaticMeshComponent* GetCardHolderComponent();
+		FVector GetHolderLocation();
 
 		//Interface
 		UPROPERTY(EditAnywhere)

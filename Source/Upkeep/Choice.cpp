@@ -60,6 +60,7 @@ void AChoice::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AnimateFocused();
+	HolderLocation = pPlayer->GetHolderLocation();
 }
 
 void AChoice::AnimateFocused()
@@ -158,7 +159,6 @@ void AChoice::OnBeginMouseOver(UPrimitiveComponent* TouchedComponent)
 		}
 		MouseOverSet = true;
 	}
-	
 }
 
 void AChoice::OnEndMouseOver(UPrimitiveComponent* TouchedComponent)
@@ -209,6 +209,17 @@ void AChoice::OnMouseDrag(float Val)
 	}
 	if (Focused && Val == 0 && DragStart)
 	{
+		FVector DragDifference = this->GetActorLocation() - HolderLocation;
+		float dotProd = FVector::DotProduct(this->GetActorRightVector(), DragDifference);
+
+		if (dotProd > 0)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Right"));
+		}
+		else if (dotProd < 0)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Left"));
+		}
 		this->SetActorLocation(DragStartLoc);
 		DragStart = false;
 	}
