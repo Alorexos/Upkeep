@@ -8,6 +8,8 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
+#include "Engine/DataTable.h"
+#include "CardsStructure.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
@@ -54,9 +56,20 @@ class UPKEEP_API AChoice : public AActor
 		UPROPERTY(EditAnywhere)
 		bool Focused;
 
+		float ChoiceThreshold;
+
 		FVector DragStartLoc;
 		bool DragStart;
 		FVector HolderLocation;
+
+		//Data Table
+		UPROPERTY(EditAnywhere)
+		UDataTable* DataTable;
+
+		//Choice Text
+		FString MainText;
+		FString ChoiceRight;
+		FString ChoiceLeft;
 
 		//Focused variables
 		float FocPitch;
@@ -70,6 +83,9 @@ class UPKEEP_API AChoice : public AActor
 		//Functions 
 		void AnimateFocused();
 		UInputComponent* InputComponent;
+
+
+
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;

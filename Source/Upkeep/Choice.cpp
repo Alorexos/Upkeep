@@ -24,13 +24,30 @@ AChoice::AChoice()
 	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
 	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
 	
+	//DataTables Setup
+	static ConstructorHelpers::FObjectFinder<UDataTable>DataTableObject(TEXT("DataTable'/Game/Upkeep/DataTables/RandomCards.RandomCards'"));
+	if (DataTableObject.Object != nullptr) 
+	{ 
+		DataTable = DataTableObject.Object;
+		static const FString ContextString(TEXT("GENERAL"));
+		FCardStructure* RandomCardRow = DataTable->FindRow<FCardStructure>(FName(*FString::FromInt(FMath::RandRange(0,23))), ContextString);
+		if (RandomCardRow)
+		{
+			MainText    = RandomCardRow->CardText;
+			ChoiceRight = RandomCardRow->ChoiceRight;
+			ChoiceLeft  = RandomCardRow->ChoiceLeft;
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString("DATATABLE OBJECT FAIL"));
+	}
 }
 void AChoice::Initialize()
 {
 	pPlayer = (AUpkeepPlayer*)GetWorld()->GetFirstPlayerController()->GetPawn();
 	CardHolderComponent = pPlayer->GetCardHolderComponent();
 	ChoiceLabel = *this->GetActorLabel();
-	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLabel);
 	this->AttachToComponent((USceneComponent*)CardHolderComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName(*ChoiceLabel));
 
 	//Setup Card Rotation
@@ -51,6 +68,7 @@ void AChoice::BeginPlay()
 	FocTranX = 0.0;
 	FocTranY = 0.0;
 	FocTranZ = 0.0;
+	ChoiceThreshold = 3.0f;
 	InputComponent = GetWorld()->GetFirstPlayerController()->InputComponent;
 	InputComponent->BindAxis("Mouse_Left", this, &AChoice::OnMouseDrag);
 }
@@ -188,11 +206,19 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
 		this->SetActorLocation(NewLocation);
 		Focused = true;
+
+		//Set Card Main Text
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, MainText);
 	}
 	return UFUNCTION() void();
 }
 void AChoice::OnMouseDrag(float Val)
 {	
+	//Calculate Card Drag Direction
+	FVector DragDifference = this->GetActorLocation() - HolderLocation;
+	float dotProd = FVector::DotProduct(this->GetActorRightVector(), DragDifference);
+
+
 	if (Focused && Val != 0 && MouseOverSet)
 	{
 		if (!DragStart)
@@ -205,18 +231,26 @@ void AChoice::OnMouseDrag(float Val)
 		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(MouseLoc, MouseDir);
 		MouseLoc += MouseDir * 5.0f;
 		this->SetActorLocation(MouseLoc);
-		
+
+		//Display Choice Text
+		if (dotProd > ChoiceThreshold)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceRight);
+		}
+		else if (dotProd < - ChoiceThreshold)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLeft);
+		}
 	}
+
 	if (Focused && Val == 0 && DragStart)
 	{
-		FVector DragDifference = this->GetActorLocation() - HolderLocation;
-		float dotProd = FVector::DotProduct(this->GetActorRightVector(), DragDifference);
 
-		if (dotProd > 0)
+		if (dotProd > ChoiceThreshold)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Right"));
 		}
-		else if (dotProd < 0)
+		else if (dotProd < - ChoiceThreshold)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Left"));
 		}
