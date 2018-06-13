@@ -11,6 +11,7 @@
 #include "Engine/DataTable.h"
 #include "CardsStructure.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/TextRenderComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
@@ -67,9 +68,14 @@ class UPKEEP_API AChoice : public AActor
 		UDataTable* DataTable;
 
 		//Choice Text
+		UPROPERTY(EditAnywhere)
 		FString MainText;
+		UPROPERTY(EditAnywhere)
 		FString ChoiceRight;
+		UPROPERTY(EditAnywhere)
 		FString ChoiceLeft;
+		UPROPERTY(EditAnywhere)
+		UTextRenderComponent* MainTextRender;
 
 		//Focused variables
 		float FocPitch;

@@ -42,6 +42,15 @@ AChoice::AChoice()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString("DATATABLE OBJECT FAIL"));
 	}
+
+	MainTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
+	MainTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+	MainTextRender->SetRelativeLocation(FVector(0.5, 0.0, 0.01));
+	MainTextRender->SetRelativeRotation(FRotator(90.0, 180.0, 0.0));
+	MainTextRender->SetWorldSize(0.4);
+	MainTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	MainTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_QuadTop);
+	MainTextRender->SetTextRenderColor(FColor::Black);
 }
 void AChoice::Initialize()
 {
@@ -208,7 +217,8 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 		Focused = true;
 
 		//Set Card Main Text
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, MainText);
+		MainTextRender->SetText(MainText);
+
 	}
 	return UFUNCTION() void();
 }
