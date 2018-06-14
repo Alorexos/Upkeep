@@ -264,13 +264,19 @@ void AChoice::OnMouseDrag(float Val)
 
 		if (dotProd > ChoiceThreshold)
 		{
+			ChoiceMade = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Right"));
 		}
 		else if (dotProd < - ChoiceThreshold)
-		{
+		{	
+			ChoiceMade = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FString("Choice Left"));
 		}
 		this->SetActorLocation(DragStartLoc);
 		DragStart = false;
 	}
+}
+bool AChoice::GetDecision()
+{
+	return ChoiceMade;
 }

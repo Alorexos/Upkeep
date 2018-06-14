@@ -40,6 +40,7 @@ class UPKEEP_API AChoice : public AActor
 		UFUNCTION()
 		void OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
 		void OnMouseDrag(float Val);
+		bool GetDecision();
 	private:
 		UPROPERTY(EditAnywhere)
 	    UStaticMeshComponent* smCardMesh;
@@ -56,7 +57,7 @@ class UPKEEP_API AChoice : public AActor
 		bool MouseOverSet;
 		UPROPERTY(EditAnywhere)
 		bool Focused;
-
+		bool ChoiceMade;
 		float ChoiceThreshold;
 
 		FVector DragStartLoc;

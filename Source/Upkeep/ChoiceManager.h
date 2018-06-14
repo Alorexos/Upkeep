@@ -17,7 +17,7 @@ class UPKEEP_API AChoiceManager : public AActor
 	public:	
 		// Sets default values for this actor's properties
 		AChoiceManager();
-		void GenerateChoices();
+		void GenerateChoices(bool Clear);
 
 	private:
 		int iFactionNo;

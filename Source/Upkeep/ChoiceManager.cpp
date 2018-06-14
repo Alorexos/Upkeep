@@ -15,18 +15,37 @@ AChoiceManager::AChoiceManager()
 void AChoiceManager::BeginPlay()
 {
 	Super::BeginPlay();
-	GenerateChoices();
+	GenerateChoices(false);
 }
 
 // Called every frame
 void AChoiceManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	for (int i = 0; i < iFactionNo; i++)
+	{
+		if (FactChoice[i]->GetDecision())
+		{
+			GenerateChoices(true);
+			break;
+		}
+	}
 }
 
-void AChoiceManager::GenerateChoices()
+void AChoiceManager::GenerateChoices(bool Clear)
 {
+	//Clear Array
+	if (Clear && FactChoice.Num() != 0)
+	{
+		for (int i = 0; i < iFactionNo; i++)
+		{
+			FactChoice[i]->Destroy();
+			FactChoice[i] = nullptr;
+		}
+		FactChoice.Empty(0);
+	}
+
+	//Populate Array
 	for (int i = 0; i < iFactionNo; i++)
 	{
 		FactChoice.Add(GetWorld()->SpawnActor<AChoice>(AChoice::StaticClass()));
