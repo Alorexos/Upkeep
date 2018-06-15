@@ -45,11 +45,11 @@ AChoice::AChoice()
 
 	MainTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
 	MainTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
-	MainTextRender->SetRelativeLocation(FVector(0.3, 0.0, 0.01));
+	MainTextRender->SetRelativeLocation(FVector(-1.9, 0.0, 0.01));
 	MainTextRender->SetRelativeRotation(FRotator(90.0, 180.0, 0.0));
 	MainTextRender->SetWorldSize(0.4);
 	MainTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
-	MainTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_QuadTop);
+	MainTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
 	MainTextRender->SetTextRenderColor(FColor::Black);
 }
 void AChoice::Initialize()
@@ -229,7 +229,7 @@ void AChoice::OnMouseDrag(float Val)
 	float dotProd = FVector::DotProduct(this->GetActorRightVector(), DragDifference);
 
 
-	if (Focused && Val != 0 && MouseOverSet)
+	if ((Focused && Val != 0 && MouseOverSet) || DragStart)
 	{
 		if (!DragStart)
 		{
@@ -245,12 +245,10 @@ void AChoice::OnMouseDrag(float Val)
 		//Display Choice Text
 		if (dotProd > ChoiceThreshold)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceRight);
 			MainTextRender->SetText(ChoiceRight);
 		}
 		else if (dotProd < - ChoiceThreshold)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, ChoiceLeft);
 			MainTextRender->SetText(ChoiceLeft);
 		}
 		else
