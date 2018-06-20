@@ -3,13 +3,14 @@
 #include "Choice.h"
 #include "Engine.h"
 
+
 // Sets default values
 AChoice::AChoice()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//RootComponent
+	//Root Component
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>MeshRef(TEXT("StaticMesh'/Game/Upkeep/Meshes/Cards/SM_Card.SM_Card'"));
@@ -24,25 +25,6 @@ AChoice::AChoice()
 	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
 	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
 	
-	//DataTables Setup
-	static ConstructorHelpers::FObjectFinder<UDataTable>DataTableObject(TEXT("DataTable'/Game/Upkeep/DataTables/RandomCards.RandomCards'"));
-	if (DataTableObject.Object != nullptr) 
-	{ 
-		DataTable = DataTableObject.Object;
-		static const FString ContextString(TEXT("GENERAL"));
-		FCardStructure* RandomCardRow = DataTable->FindRow<FCardStructure>(FName(*FString::FromInt(FMath::RandRange(0,23))), ContextString);
-		if (RandomCardRow)
-		{
-			MainText    = RandomCardRow->CardText;
-			ChoiceRight = RandomCardRow->ChoiceRight;
-			ChoiceLeft  = RandomCardRow->ChoiceLeft;
-		}
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString("DATATABLE OBJECT FAIL"));
-	}
-
 	MainTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
 	MainTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
 	MainTextRender->SetRelativeLocation(FVector(-1.9, 0.0, 0.01));
@@ -51,8 +33,16 @@ AChoice::AChoice()
 	MainTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
 	MainTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
 	MainTextRender->SetTextRenderColor(FColor::Black);
+
+	//Set Materials
+	ConstructorHelpers::FObjectFinder<UMaterial>WrokersMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardWorkers.MI_CardWorkers'"));
+	WorkersMat = (UMaterialInterface*)WrokersMatRef.Object;
+	ConstructorHelpers::FObjectFinder<UMaterial>ArmyMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardArmy.MI_CardArmy'"));
+	ArmyMat = (UMaterialInterface*)ArmyMatRef.Object;
+	ConstructorHelpers::FObjectFinder<UMaterial>NoblesMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardNobles.MI_CardNobles'"));
+	NoblesMat = (UMaterialInterface*)NoblesMatRef.Object;
 }
-void AChoice::Initialize()
+void AChoice::Initialize(FCardStructure* CardDetails)
 {
 	pPlayer = (AUpkeepPlayer*)GetWorld()->GetFirstPlayerController()->GetPawn();
 	CardHolderComponent = pPlayer->GetCardHolderComponent();
@@ -68,6 +58,17 @@ void AChoice::Initialize()
 	FRotator rotMover = FRotator(Pitch, Yaw, Roll);
 	FQuat QuatRotation = FQuat(rotMover);
 	this->AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
+
+	//Parameters Setup
+	Faction     = CardDetails->Faction;
+	MainText    = CardDetails->CardText;
+	ChoiceRight = CardDetails->ChoiceRight;
+	ChoiceLeft  = CardDetails->ChoiceLeft;
+
+	//Material Setup
+
+	//DynamicMaterial = UMaterialInstanceDynamic::Create(WorkersMat, this);
+	//smCardMesh->SetMaterial(0, DynamicMaterial);
 }
 
 // Called when the game starts or when spawned
@@ -94,7 +95,7 @@ void AChoice::AnimateFocused()
 {
 	if (Focused) 
 	{
-		FVector Location = this->GetActorLocation();
+		//FVector Location = this->GetActorLocation();
 		
 		//Take card out of hand
 		//if (Stage1Ticks >= 0)
@@ -278,3 +279,4 @@ bool AChoice::GetDecision()
 {
 	return ChoiceMade;
 }
+

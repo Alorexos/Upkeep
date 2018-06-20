@@ -12,23 +12,24 @@ struct FCardStructure : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	/** Category of GamePlay Object */
-	UPROPERTY(EditAnywhere, Category = "GO")
-	FVector FactionLeft;
+	UPROPERTY(EditAnywhere)
+		FString Faction;
 
-	/** Scriptable Use Code */
-	UPROPERTY(EditAnywhere, Category = "GO")
+	UPROPERTY(EditAnywhere)
+		FString Character;
+
+	UPROPERTY(EditAnywhere)
+		FVector FactionLeft;
+
+	UPROPERTY(EditAnywhere)
 		FVector FactionRight;
 
-	/** Category of GamePlay Object */
-	UPROPERTY(EditAnywhere, Category = "GO")
+	UPROPERTY(EditAnywhere)
 		FString CardText;
 
-	/** Scriptable Use Code */
-	UPROPERTY(EditAnywhere, Category = "GO")
+	UPROPERTY(EditAnywhere)
 		FString ChoiceRight;
 
-	/** Scriptable Use Code */
-	UPROPERTY(EditAnywhere, Category = "GO")
+	UPROPERTY(EditAnywhere)
 		FString ChoiceLeft;
 };

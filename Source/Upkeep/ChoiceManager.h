@@ -7,6 +7,9 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "Choice.h" 
+#include "Faction.h"
+#include "Engine/DataTable.h"
+#include "CardsStructure.h"
 #include "ChoiceManager.generated.h"
 
 UCLASS()
@@ -20,11 +23,20 @@ class UPKEEP_API AChoiceManager : public AActor
 		void GenerateChoices(bool Clear);
 
 	private:
+
+		void GetFactions();
 		int iFactionNo;
 		TArray<AChoice*> FactChoice;
 		APlayerController* pPlayer;
 		FActorSpawnParameters ChoiceParameters;
 		FString GetCardName(int CardNum);
+
+		TMap<FString,AFaction*> Factions;
+
+		//Data Table
+		UPROPERTY(EditAnywhere)
+		UDataTable* DataTable;
+
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
@@ -33,6 +45,6 @@ class UPKEEP_API AChoiceManager : public AActor
 		// Called every frame
 		virtual void Tick(float DeltaTime) override;
 
-	
+
 	
 };

@@ -30,7 +30,7 @@ class UPKEEP_API AChoice : public AActor
 		virtual void Tick(float DeltaTime) override;
 
 		// Initial setup of the class outside of constructor
-		void Initialize();
+		void Initialize(FCardStructure* CardDetails);
 
 		//Function to handle the interaction
 		UFUNCTION()
@@ -59,14 +59,13 @@ class UPKEEP_API AChoice : public AActor
 		bool Focused;
 		bool ChoiceMade;
 		float ChoiceThreshold;
-
+		
 		FVector DragStartLoc;
 		bool DragStart;
 		FVector HolderLocation;
 
 		//Data Table
-		UPROPERTY(EditAnywhere)
-		UDataTable* DataTable;
+		FCardStructure* CardData;
 
 		//Choice Text
 		UPROPERTY(EditAnywhere)
@@ -91,8 +90,15 @@ class UPKEEP_API AChoice : public AActor
 		void AnimateFocused();
 		UInputComponent* InputComponent;
 
+		//Choice Details 
+		FString Faction;
 
 
+		//Materials
+		UMaterialInterface* WorkersMat;
+		UMaterialInterface* ArmyMat;
+		UMaterialInterface* NoblesMat;
+		UMaterialInstanceDynamic* DynamicMaterial;
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;

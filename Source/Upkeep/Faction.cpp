@@ -40,3 +40,7 @@ float AFaction::GetInfluenceVal()
 {
 	return fInfuenceVal * fInfluenceMult;
 }
+AFaction* AFaction::GetPointer()
+{
+	return this;
+}

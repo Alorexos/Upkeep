@@ -9,6 +9,17 @@ AChoiceManager::AChoiceManager()
 	PrimaryActorTick.bCanEverTick = true;
 	iFactionNo = 3;
 
+	//DataTables Setup
+	static ConstructorHelpers::FObjectFinder<UDataTable>DataTableObject(TEXT("DataTable'/Game/Upkeep/DataTables/RandomCards.RandomCards'"));
+	if (DataTableObject.Object != nullptr)
+	{
+		DataTable = DataTableObject.Object;
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString("DATATABLE OBJECT FAIL"));
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -16,6 +27,7 @@ void AChoiceManager::BeginPlay()
 {
 	Super::BeginPlay();
 	GenerateChoices(false);
+	GetFactions();
 }
 
 // Called every frame
@@ -45,12 +57,19 @@ void AChoiceManager::GenerateChoices(bool Clear)
 		FactChoice.Empty(0);
 	}
 
+	static const FString ContextString(TEXT("GENERAL"));
+
 	//Populate Array
 	for (int i = 0; i < iFactionNo; i++)
 	{
-		FactChoice.Add(GetWorld()->SpawnActor<AChoice>(AChoice::StaticClass()));
-		FactChoice[i]->SetActorLabel(GetCardName(i));
-		FactChoice[i]->Initialize();
+		if (DataTable)
+		{
+			FCardStructure* RandomCardRow = DataTable->FindRow<FCardStructure>(FName(*FString::FromInt(FMath::RandRange(0, 23))), ContextString);
+			FactChoice.Add(GetWorld()->SpawnActor<AChoice>(AChoice::StaticClass()));
+			FactChoice[i]->SetActorLabel(GetCardName(i));
+			FactChoice[i]->Initialize(RandomCardRow);
+
+		}
 	}
 }
 
@@ -65,5 +84,14 @@ FString AChoiceManager::GetCardName(int CardNum)
 		case 2: return FString("Left Card");
 		break;
 		default: return FString("Error");
+	}
+}
+
+void AChoiceManager::GetFactions()
+{
+	for (TActorIterator<AFaction> FactionItr(GetWorld()); FactionItr; ++FactionItr)
+	{
+		Factions.Add(FactionItr->GetActorLabel(), FactionItr->GetPointer());
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, FactionItr->GetActorLabel());
 	}
 }

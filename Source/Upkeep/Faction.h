@@ -18,6 +18,7 @@ class UPKEEP_API AFaction : public AActor
 		FName GetName();
 		float GetBaseVal();
 		float GetInfluenceVal();
+		AFaction* GetPointer();
 	private:
 		UPROPERTY(EditAnywhere,SaveGame,meta = (DisplayName = "Base Value",ClampMin = 1))
 		float fBaseVal = 1;
