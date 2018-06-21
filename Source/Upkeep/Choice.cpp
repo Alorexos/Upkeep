@@ -27,7 +27,7 @@ AChoice::AChoice()
 	
 	MainTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
 	MainTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
-	MainTextRender->SetRelativeLocation(FVector(-1.9, 0.0, 0.01));
+	MainTextRender->SetRelativeLocation(FVector(-3.0, 0.0, 0.01));
 	MainTextRender->SetRelativeRotation(FRotator(90.0, 180.0, 0.0));
 	MainTextRender->SetWorldSize(0.4);
 	MainTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
@@ -35,12 +35,12 @@ AChoice::AChoice()
 	MainTextRender->SetTextRenderColor(FColor::Black);
 
 	//Set Materials
-	ConstructorHelpers::FObjectFinder<UMaterial>WrokersMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardWorkers.MI_CardWorkers'"));
-	WorkersMat = (UMaterialInterface*)WrokersMatRef.Object;
-	ConstructorHelpers::FObjectFinder<UMaterial>ArmyMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardArmy.MI_CardArmy'"));
-	ArmyMat = (UMaterialInterface*)ArmyMatRef.Object;
-	ConstructorHelpers::FObjectFinder<UMaterial>NoblesMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardNobles.MI_CardNobles'"));
-	NoblesMat = (UMaterialInterface*)NoblesMatRef.Object;
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>WrokersMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardWorkers.MI_CardWorkers'"));
+	WorkersMat = (UMaterial*)WrokersMatRef.Object;
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>ArmyMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardArmy.MI_CardArmy'"));
+	ArmyMat = (UMaterial*)ArmyMatRef.Object;
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>NoblesMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardNobles.MI_CardNobles'"));
+	NoblesMat = (UMaterial*)NoblesMatRef.Object;
 }
 void AChoice::Initialize(FCardStructure* CardDetails)
 {
@@ -66,9 +66,21 @@ void AChoice::Initialize(FCardStructure* CardDetails)
 	ChoiceLeft  = CardDetails->ChoiceLeft;
 
 	//Material Setup
-
-	//DynamicMaterial = UMaterialInstanceDynamic::Create(WorkersMat, this);
-	//smCardMesh->SetMaterial(0, DynamicMaterial);
+	if(Faction ==  "Workers")
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(WorkersMat, this);
+		smCardMesh->SetMaterial(0, DynamicMaterial);
+	}
+	if (Faction == "Army")
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(ArmyMat, this);
+		smCardMesh->SetMaterial(0, DynamicMaterial);
+	}
+	if (Faction == "Nobles")
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(NoblesMat, this);
+		smCardMesh->SetMaterial(0, DynamicMaterial);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -210,7 +222,7 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 		FQuat QuatRotation = FQuat(rotMover);
 		this->SetActorRelativeRotation(QuatRotation,false,0, ETeleportType::None);
 		FVector NewLocation = this->GetActorLocation();
-		NewLocation += this->GetActorForwardVector() * 14.f;
+		NewLocation += this->GetActorForwardVector() * 12.5f;
 		NewLocation += this->GetActorUpVector() * 17.f;
 		if (ChoiceLabel == FString("Left Card")){ NewLocation += this->GetActorRightVector() * 5.f; }
 		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
