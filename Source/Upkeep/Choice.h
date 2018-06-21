@@ -76,6 +76,8 @@ class UPKEEP_API AChoice : public AActor
 		FString ChoiceLeft;
 		UPROPERTY(EditAnywhere)
 		UTextRenderComponent* MainTextRender;
+		UPROPERTY(EditAnywhere)
+		UTextRenderComponent* CharacterTextRender;
 
 		//Focused variables
 		float FocPitch;
@@ -92,7 +94,7 @@ class UPKEEP_API AChoice : public AActor
 
 		//Choice Details 
 		FString Faction;
-
+		FString CharacterName;
 
 		//Materials
 		UMaterialInterface* WorkersMat;

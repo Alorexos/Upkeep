@@ -25,6 +25,7 @@ AChoice::AChoice()
 	smCardMesh->OnEndCursorOver.AddDynamic(this, &AChoice::OnEndMouseOver);
 	smCardMesh->OnClicked.AddDynamic(this, &AChoice::OnMouseClick);
 	
+	//Card Text Components
 	MainTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
 	MainTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
 	MainTextRender->SetRelativeLocation(FVector(-3.0, 0.0, 0.01));
@@ -33,6 +34,15 @@ AChoice::AChoice()
 	MainTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
 	MainTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
 	MainTextRender->SetTextRenderColor(FColor::Black);
+
+	CharacterTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("CharacterComponent"));
+	CharacterTextRender->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+	CharacterTextRender->SetRelativeLocation(FVector(0.05, 0.0, 0.01));
+	CharacterTextRender->SetRelativeRotation(FRotator(90.0, 180.0, 0.0));
+	CharacterTextRender->SetWorldSize(0.4);
+	CharacterTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	CharacterTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+	CharacterTextRender->SetTextRenderColor(FColor::Black);
 
 	//Set Materials
 	ConstructorHelpers::FObjectFinder<UMaterialInstance>WrokersMatRef(TEXT("MaterialInstanceConstant'/Game/Upkeep/Materials/Cards/MI_CardWorkers.MI_CardWorkers'"));
@@ -60,10 +70,15 @@ void AChoice::Initialize(FCardStructure* CardDetails)
 	this->AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 
 	//Parameters Setup
-	Faction     = CardDetails->Faction;
-	MainText    = CardDetails->CardText;
-	ChoiceRight = CardDetails->ChoiceRight;
-	ChoiceLeft  = CardDetails->ChoiceLeft;
+	Faction       = CardDetails->Faction;
+	CharacterName = CardDetails->Character;
+	MainText      = CardDetails->CardText;
+	ChoiceRight   = CardDetails->ChoiceRight;
+	ChoiceLeft    = CardDetails->ChoiceLeft;
+
+	//Text Setup
+	MainTextRender->SetText(MainText);
+	CharacterTextRender->SetText(CharacterName);
 
 	//Material Setup
 	if(Faction ==  "Workers")
@@ -228,10 +243,6 @@ void AChoice::OnMouseClick(UPrimitiveComponent* TouchedComponent, FKey ButtonPre
 		if (ChoiceLabel == FString("Right Card")) { NewLocation += this->GetActorRightVector() * -5.f; }
 		this->SetActorLocation(NewLocation);
 		Focused = true;
-
-		//Set Card Main Text
-		MainTextRender->SetText(MainText);
-
 	}
 	return UFUNCTION() void();
 }
